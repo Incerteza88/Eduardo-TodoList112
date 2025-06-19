@@ -8,7 +8,7 @@ function TodoList() {
 
   const keyDown = (e) => {
     if (e.key === "Enter" && nuevaTarea.trim() !== "") {
-      setTareas([...tareas, nuevaTarea.trim()])
+      setTareas([...tareas, { texto: nuevaTarea.trim(), completado: false }])
       setNuevaTarea("")
     }
   }
@@ -16,6 +16,12 @@ function TodoList() {
   const click = (index) => {
     // const newTareas = tareas.filter((tarea, i) => index != i)
     setTareas(tareas.filter((_, i) => index != i))
+  }
+
+  const finalizarClick = (index) => {
+    setTareas(tareas.map((tarea, i) =>
+      index == i ? { ...tarea, completado: true } : tarea
+    ));
   }
 
   return (
@@ -28,11 +34,13 @@ function TodoList() {
           </li>
           {tareas.map((tarea, index) => {
             return (
-              <div>
-                <li className="list-group-item d-flex justify-content-between" key={index}>
-                  {tarea}
+              <div key={index}>
+                <li className="list-group-item d-flex justify-content-between">
+                  {tarea.texto}
+                  {!tarea.completado && <button className="btn btn-danger" onClick={() => click(index)}>Borrar</button>}
 
-                  <button className="btn btn-danger" onClick={() => click(index)}>Borrar</button>
+                  <button className="btn btn-success" onClick={() => finalizarClick(index)}>Finalizar</button>
+
                 </li>
               </div>
             )
